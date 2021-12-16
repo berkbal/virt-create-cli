@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 : ${DIALOG_OK=0}
 : ${DIALOG_CANCEL=1}
