@@ -28,7 +28,7 @@ esac
 function iso_list(){
 i=0
 s=65    # decimal ASCII "A" 
-for f in images/
+for f in $(ls images/)
 do
     # convert to octal then ASCII character for selection tag
     files[i]=$(echo -en "\0$(( $s / 64 * 100 + $s % 64 / 8 * 10 + $s % 8 ))")
@@ -36,7 +36,8 @@ do
     ((i+=2))
     ((s++))
 done
-	isomenu=$(whiptail --clear --title "Iso List" --menu "Choose an option" 40 100 10 "${files[@]}" 3>&1 1>&2 2>&3 )
+	isomenu=$(whiptail --clear --title "Iso List" --menu "Choose an option" 40 100 10 "${files[@]}" 3>&1 1>&2 2>&3)
+	echo $isomenu
 }
 
 function clone_kvm(){
