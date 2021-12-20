@@ -37,7 +37,8 @@ do
     ((s++))
 done
 	isomenu=$(whiptail --clear --title "Iso List" --menu "Choose an option" 40 100 10 "${files[@]}" 3>&1 1>&2 2>&3)
-	echo $isomenu
+	isomenu=$f
+	echo $isomenu;
 }
 
 function clone_kvm(){
@@ -71,9 +72,11 @@ fi
 KVM_ISO=$(whiptail --inputbox "Full name of the iso: " 8 39 --title "Please enter the full name of iso" 3>&1 1>&2 2>&3)
 exitstatus=$?
 
+iso_list
+
 if [ $exitstatus = 0 ]
 then
-	echo "Test"
+	echo "$isomenu"
 else
 	exit
 fi
