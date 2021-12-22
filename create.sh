@@ -7,24 +7,38 @@
 : ${DIALOG_ITEM_HELP=4}
 : ${DIALOG_ESC=255}
 function main_menu(){
-	menu=$(whiptail --clear --title "    Virsh-Cli    " --menu "Choose an option" 40 100 10 \
+	menu=$(whiptail --clear --title "    Virsh-Cli    " --menu "Choose an option" 40 150 10 \
 		"Deploy " "| Deploy a KVM with iso or img file. After deploying process virt-viewer will run." \
-		"Image List " "| List of image files." \
-		"Clone " "| Clone an existing KVM with new settings." \
-	       	"Exit " "| You are welcome." 3>&1 1>&2 2>&3)
-case $menu in 
+		"Kvm List " "| List of installed kernel virtual machines." \
+		"Manage Machines " "| Configure settings of installed kernel virtual machines." \
+	  "Exit " "| Close cli" 3>&1 1>&2 2>&3)
+case $menu in
 "Deploy ")
 	deploy_kvm
 	;;
-"Image List ")
-	iso_list
+"Kvm List ")
+	kvm_list
 	;;
-"Clone ")
-	clone_kvm
+"Manage Machines ")
+	manage_kvm
 	;;
+ "Exit ")
+ clear
+ exit
+ ;;
 esac
 }
 
+function kvm_list(){
+	list=$(virsh list --all)
+	#echo $list
+	$(TERM=ansi whiptail --clear --msgbox "$list" 8 78  --title "List of Kernel Virtual Machines that installed on this machine." 3>&1 1>&2 2>&3)
+	exitstatus=$?
+	if [ $exitstatus = 0 ]
+	then
+		main_menu
+	fi
+}
 function deploy(){
 
 virt-install --name=${KVM_NAME} \
@@ -33,12 +47,11 @@ virt-install --name=${KVM_NAME} \
 --cdrom=/home/${USER}/Desktop/virt-create-cli/images/${f} \
 --disk size=${KVM_SIZE} \
 --os-variant=${KVM_OS}
-
 }
 
 function iso_list(){
 i=0
-s=65    # decimal ASCII "A" 
+s=65    # decimal ASCII "A"
 for f in $(ls images/)
 do
     # convert to octal then ASCII character for selection tag
@@ -52,9 +65,8 @@ done
 	echo $isomenu;
 }
 
-function clone_kvm(){
-	$(TERM=ansi whiptail --inputbox "Select vm to clone" 8 78  --title "Clonelicaz ins" 3>&1 1>&2 2>&3)
-	exitstatus=$?
+function manage_kvm(){
+	echo "Manage Menu will be here"
 }
 
 function deploy_kvm(){
@@ -76,7 +88,7 @@ if [ $exitstatus = 0 ]
 then
 	echo "Kvm Size: ${KVM_SIZE}"
 else
-	exit
+		main_menu
 fi
 
 iso_list
@@ -107,7 +119,7 @@ if [ $exitstatus = 0 ]
 then
 	echo "Os-Variant: ${KVM_OS}"
 else
-	exit
+	main_menu
 fi
 deploy
 }
