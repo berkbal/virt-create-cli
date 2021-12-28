@@ -20,7 +20,7 @@ case $menu in
 	kvm_list
 	;;
 "Manage Machines ")
-	manage_kvm
+	kvm_list
 	;;
  "Exit ")
  clear
@@ -30,15 +30,18 @@ esac
 }
 
 function kvm_list(){
-	list=$(virsh list --all)
-	#echo $list
-	$(TERM=ansi whiptail --clear --msgbox "$list" 8 78  --title "List of Kernel Virtual Machines that installed on this machine." 3>&1 1>&2 2>&3)
+	GET_KVM_NAMES=$(for NAME in $(ls /etc/libvirt/qemu | grep xml)
+do
+	#((LISTNUMBER=LISTNUMBER+1)) # Damn that menu
+	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
+done)
+
+kvmmenusu=$(whiptail --clear --title "Test" --menu "Sec" 40 150 10 \
+	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	if [ $exitstatus = 0 ]
-	then
-		main_menu
-	fi
+	echo $kvmmenusu
 }
+
 function deploy(){
 
 virt-install --name=${KVM_NAME} \
@@ -93,25 +96,6 @@ fi
 
 iso_list
 
-#KVM_ISO=$(whiptail --inputbox "Full name of the iso: " 8 39 --title "Please enter the full name of iso" 3>&1 1>&2 2>&3)
-#exitstatus=$?
-
-#iso_list
-
-#if [ $exitstatus = 0 ]
-#then
-#	echo "$isomenu"
-#else
-#	exit
-#fi
-#if [ $exitstatus = 0 ]
-#then
-#	echo "ISO: ${KVM_ISO}"
-#else
-#	exit
-#fi
-
-
 KVM_OS=$(whiptail --inputbox "Os-Variant " 8 39 --title "Please enter desired os-variant option of virt-install" 3>&1 1>&2 2>&3)
 exitstatus=$?
 
@@ -123,15 +107,4 @@ else
 fi
 deploy
 }
-
-#function deploy(){
-
-#virt-install --name=${KVM_NAME} \
-#--vcpus=2 \
-#--memory=4096 \
-#--cdrom=/home/${USER}/Desktop/virt-create-cli/images/${f} \
-#--disk size=${KVM_SIZE} \
-#--os-variant=${KVM_OS}
-
-#}
 main_menu
