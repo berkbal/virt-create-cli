@@ -1,0 +1,178 @@
+#!/bin/bash
+
+: ${DIALOG_OK=0}
+: ${DIALOG_CANCEL=1}
+: ${DIALOG_HELP=2}
+: ${DIALOG_EXTRA=3}
+: ${DIALOG_ITEM_HELP=4}
+: ${DIALOG_ESC=255}
+
+NEWT_COLORS_3='
+    root=black,black
+    border=cyan,black
+    window=black,black
+    shadow=black,black
+    title=white,black
+    button=red,black
+    actbutton=black,red
+    compactbutton=white,black
+    checkbox=white,gray
+    actcheckbox=gray,white
+    entry=lightgray,black
+    disentry=gray,lightgray
+    label=yellow,black
+    listbox=lightgray,black
+    actlistbox=lightgray,black
+    sellistbox=black,white
+    actsellistbox=black,white
+    textbox=black,lightgray
+    acttextbox=black,cyan
+    emptyscale=,gray
+    fullscale=,cyan
+    helpline=white,black
+    roottext=red,black
+'
+export NEWT_COLORS=$NEWT_COLORS_3;
+
+function main_menu(){
+	menu=$(whiptail --clear --title "    Virsh-Cli    " --menu "Choose an option" 40 150 10 \
+		"Deploy " "| Deploy a KVM with iso or img file. After deploying process virt-viewer will run." \
+		"Manage Machines " "| Configure settings of installed kernel virtual machines." \
+		"Manage Virtual Networks " "| Configure settings of virtual networks that created by qemu" \
+		"Undefine KVM " "| Remove existing KVM from system." \
+		"Exit " "| Close cli" 3>&1 1>&2 2>&3)
+case $menu in
+"Deploy ")
+	deploy_kvm
+	;;
+"Manage Machines ")
+	kvm_list
+	;;
+"Manage Virtual Networks ")
+	echo "Network Settings"
+	;;
+"Undefine KVM ")
+	undefine_kvm
+	;;
+"Exit ")
+ clear
+ exit
+ 	;;
+esac
+}
+
+function undefine_kvm(){
+	GET_KVM_NAMES=$(for NAME in $(ls /etc/libvirt/qemu | grep xml)
+do
+	#((LISTNUMBER=LISTNUMBER+1)) # Damn that menu
+	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
+done)
+
+kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
+	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
+	exitstatus=$?
+	echo $exitstatus
+
+if [ $exitstatus = 0 ]
+then
+	virsh undefine $kvmmenusu
+	virsh destroy $kvmmenusu
+	rm -f /etc/libvirt/qemu/$kvmmenusu.qcow2
+else
+	main_menu
+fi
+}
+
+
+function kvm_list(){
+	GET_KVM_NAMES=$(for NAME in $(ls /etc/libvirt/qemu | grep xml)
+do
+	#((LISTNUMBER=LISTNUMBER+1)) # Damn that menu
+	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
+done)
+
+kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
+	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
+	exitstatus=$?
+	echo $exitstatus
+
+if [ $exitstatus = 0 ]
+then
+	virsh edit $kvmmenusu
+else
+	main_menu
+fi
+}
+
+#function deploy(){
+
+#virt-install --name=${KVM_NAME} \
+#--vcpus=2 \
+#--memory=4096 \
+#--cdrom=/tmp/images/${lastisoname} \
+#--disk size=${KVM_SIZE} \
+#--os-variant=${KVM_OS}
+#echo $lastisoname
+#virt-install --name=${KVM_NAME} --vcpus=2 --memory=4096 --cdrom=/tmp/images/${lastisoname} --disk size=${KVM_SIZE} --os-variant=
+#}
+
+function iso_list(){
+	GET_ISO_LIST=$(for f in $(ls /opt/images)
+do
+	#((LISTNUMBER=LISTNUMBER+1)) # Damn that menu
+	echo "${f} ${f}" # %???? deletes last 4 character of the string. Which is '.xml'
+done
+)
+
+iso_menu=$(whiptail --clear --title "Select an Image" --menu "Sec" 40 150 10 \
+	$GET_ISO_LIST 3>&1 1>&2 2>&3)
+	exitstatus=$?
+	lastisoname=`echo $GET_ISO_LIST grep | sed 's/\s.*$//'`
+}
+
+function deploy(){
+
+virt-install --name=${KVM_NAME} \
+--vcpus=2 \
+--memory=4096 \
+--cdrom=/opt/images/${lastisoname} \
+--disk size=${KVM_SIZE} \
+--os-variant=${KVM_OS}
+#virt-install --name=${KVM_NAME} --vcpus=2 --memory=4096 --cdrom=/tmp/images/${lastisoname} --disk size=${KVM_SIZE} --os-variant=
+}
+function deploy_kvm(){
+
+KVM_NAME=$(whiptail --inputbox "Kvm Domain Name" 8 39 --title "Please enter KVM Domain Name" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+if [ $exitstatus = 0 ]
+then
+	echo "Kvm Name: ${KVM_NAME}"
+else
+	main_menu
+fi
+
+KVM_SIZE=$(whiptail --inputbox "Desired KVM Size" 8 39 --title "Please enter desired KVM Disk Size" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+if [ $exitstatus = 0 ]
+then
+	echo "Kvm Size: ${KVM_SIZE}"
+else
+		main_menu
+fi
+
+iso_list
+
+KVM_OS=$(whiptail --inputbox "Os-Variant " 8 39 --title "Please enter desired os-variant option of virt-install" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+if [ $exitstatus = 0 ]
+then
+	deploy
+else
+	main_menu
+fi
+#deploy
+}
+main_menu
