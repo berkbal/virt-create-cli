@@ -104,18 +104,6 @@ else
 fi
 }
 
-#function deploy(){
-
-#virt-install --name=${KVM_NAME} \
-#--vcpus=2 \
-#--memory=4096 \
-#--cdrom=/tmp/images/${lastisoname} \
-#--disk size=${KVM_SIZE} \
-#--os-variant=${KVM_OS}
-#echo $lastisoname
-#virt-install --name=${KVM_NAME} --vcpus=2 --memory=4096 --cdrom=/tmp/images/${lastisoname} --disk size=${KVM_SIZE} --os-variant=
-#}
-
 function iso_list(){
 	GET_ISO_LIST=$(for f in $(ls /opt/images)
 do
@@ -138,7 +126,6 @@ virt-install --name=${KVM_NAME} \
 --cdrom=/opt/images/${lastisoname} \
 --disk size=${KVM_SIZE} \
 --os-variant=${KVM_OS}
-#virt-install --name=${KVM_NAME} --vcpus=2 --memory=4096 --cdrom=/tmp/images/${lastisoname} --disk size=${KVM_SIZE} --os-variant=
 }
 function deploy_kvm(){
 
@@ -173,6 +160,5 @@ then
 else
 	main_menu
 fi
-#deploy
 }
 main_menu
