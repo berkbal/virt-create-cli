@@ -22,7 +22,7 @@ Its a shell script that makes easy to deploy kernel virtual machines and managin
 **Debian Based Distros**:
 `apt-get update && apt-get install virt-install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager`
 
-**Pacman**: `pacman -S virt-install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager`
+**Pacman**: `pacman -S virt-install qemu libvirt virt-install qemu bridge-utils virt-manager`
 
 - `mkdir -p /opt/images`
 - `sudo cp virt-create-cli /usr/local/sbin`
