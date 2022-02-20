@@ -26,7 +26,7 @@ Its a shell script that makes easy to deploy kernel virtual machines and managin
 
 - `cd ~/Downloads`
 - `git clone git@github.com:berkbal/virt-create-cli.git`
-- `cd virt-create-cli
+- `cd virt-create-cli`
 - `mkdir -p /opt/images`
 - `sudo cp virt-create-cli /usr/local/sbin`
 - `sudo chmod +x /usr/local/sbin/virt-create-cli`
