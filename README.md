@@ -27,7 +27,7 @@ Its a shell script(cli interface) that makes easy to deploy kernel virtual machi
 - `cd ~/Downloads`
 - `git clone git@github.com:berkbal/virt-create-cli.git`
 - `cd virt-create-cli`
-- `mkdir -p /opt/images`
+- `sudo mkdir -p /opt/images`
 - `sudo cp virt-create-cli /usr/local/bin`
 - `sudo chmod +x /usr/local/bin/virt-create-cli`
 - Copy your iso or img files to `/opt/images` folder.
