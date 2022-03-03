@@ -4,7 +4,7 @@
 </p>
 
 # How does this work?
-Its a shell script that makes easy to deploy kernel virtual machines and managing them. Its a cli interface. It typically sends parameters or variables to basic qemu commands like(virt install virsh edit etc.) Use as root or with **sudo.**
+Its a shell script(cli interface) that makes easy to deploy kernel virtual machines and managing them. It typically sends parameters or variables to basic qemu commands like(virt install virsh edit etc.)
 
 # Required Packages
 
@@ -20,9 +20,9 @@ Its a shell script that makes easy to deploy kernel virtual machines and managin
 # Installation
 
 **Debian Based Distros**:
-`apt-get update && apt-get install virt-install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager`
+`sudo apt-get update && sudo apt-get install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager`
 
-**If u use Arch btw**: `pacman -S virt-install qemu libvirt virt-install qemu bridge-utils virt-manager`
+**If u use Arch btw**: `sudo pacman -S virt-install qemu libvirt virt-install qemu bridge-utils virt-manager`
 
 - `cd ~/Downloads`
 - `git clone git@github.com:berkbal/virt-create-cli.git`
