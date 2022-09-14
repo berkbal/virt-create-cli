@@ -69,6 +69,7 @@ function undefine_kvm(){
 do
 	#((LISTNUMBER=LISTNUMBER+1)) # Damn that menu
 	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
+	main_menu
 done)
 
 kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
