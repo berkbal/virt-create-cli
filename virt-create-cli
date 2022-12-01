@@ -74,7 +74,7 @@ done)
 kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
 	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	echo $exitstatus
+	echo $kvmmenusu
 
 if [ $exitstatus = 0 ]
 then
@@ -118,7 +118,7 @@ done
 iso_menu=$(whiptail --clear --title "Select an Image" --menu "Sec" 40 150 10 \
 	$GET_ISO_LIST 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	lastisoname=`echo $GET_ISO_LIST grep | sed 's/\s.*$//'`
+	echo $iso_menu
 }
 
 function deploy(){
@@ -126,7 +126,7 @@ function deploy(){
 virt-install --name=${KVM_NAME} \
 --vcpus=2 \
 --memory=4096 \
---cdrom=/opt/images/${lastisoname} \
+--cdrom=/opt/images/${iso_menu} \
 --disk size=${KVM_SIZE} \
 --os-variant=${KVM_OS}
 }
