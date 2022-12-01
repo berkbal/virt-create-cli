@@ -38,7 +38,7 @@ NEWT_COLORS_3='
 export NEWT_COLORS=$NEWT_COLORS_3;
 
 function main_menu(){
-	menu=$(whiptail --clear --title "    Virsh-Cli    " --menu "Choose an option" 40 150 10 \
+	menu=$(whiptail --clear --title "    Virsh-Cli    " --menu "Choose an option" 40 120 10 \
 		"Deploy " "| Deploy a KVM with iso or img file. After deploying process virt-viewer will run." \
 		"Manage Machines " "| Configure settings of installed kernel virtual machines." \
 		"Manage Virtual Networks " "| Configure settings of virtual networks that created by qemu" \
@@ -52,7 +52,7 @@ case $menu in
 	kvm_list
 	;;
 "Manage Virtual Networks ")
-	echo "Network Settings"
+	virsh net-list
 	;;
 "Undefine KVM ")
 	undefine_kvm
@@ -71,10 +71,9 @@ do
 	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
 done)
 
-kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
+kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Select an option" 40 150 10 \
 	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	echo $kvmmenusu
 
 if [ $exitstatus = 0 ]
 then
@@ -94,10 +93,9 @@ do
 	echo "${NAME%????} ${NAME%????}" # %???? deletes last 4 character of the string. Which is '.xml'
 done)
 
-kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Sec" 40 150 10 \
+kvmmenusu=$(whiptail --clear --title "     List of an Installed Kernel Virtual Machines     " --menu "Select an option" 40 150 10 \
 	$GET_KVM_NAMES 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	echo $exitstatus
 
 if [ $exitstatus = 0 ]
 then
@@ -115,10 +113,9 @@ do
 done
 )
 
-iso_menu=$(whiptail --clear --title "Select an Image" --menu "Sec" 40 150 10 \
+iso_menu=$(whiptail --clear --title "Select an Image" --menu "Select an option" 40 150 10 \
 	$GET_ISO_LIST 3>&1 1>&2 2>&3)
 	exitstatus=$?
-	echo $iso_menu
 }
 
 function deploy(){
