@@ -80,6 +80,7 @@ then
 	virsh undefine $kvmmenusu
 	virsh destroy $kvmmenusu
 	rm -f /etc/libvirt/qemu/$kvmmenusu.qcow2
+	main_menu
 else
 	main_menu
 fi
