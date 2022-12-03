@@ -16,13 +16,15 @@ Its a shell script(cli interface) that makes easy to deploy kernel virtual machi
 - qemu
 - bridge-utils
 - virt-manager
+- dialog
+- whiptail
 
 # Installation
 
 **Debian Based Distros**:
-`sudo apt-get update && sudo apt-get install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager`
+`sudo apt-get update && sudo apt-get install qemu-kvm libvirt-clients libvirt-daemon virtinst qemu bridge-utils virt-manager dialog whiptail`
 
-**If u use Arch btw**: `sudo pacman -S virt-install qemu libvirt virt-install qemu bridge-utils virt-manager`
+**If u use Arch btw**: `sudo pacman -S virt-install qemu libvirt virt-install qemu bridge-utils virt-manager dialog whiptail`
 
 - `cd ~/Downloads`
 - `git clone git@github.com:berkbal/virt-create-cli.git`
