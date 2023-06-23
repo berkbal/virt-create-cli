@@ -35,6 +35,7 @@ Its a shell script(cli interface) that makes easy to deploy kernel virtual machi
 - Copy your iso or img files to `/opt/images` folder.
 - `sudo virsh net-start default`
 - `sudo virt-create-cli`
+- `sudo systemctl status libvirtd` don't forget to check out libvirt
 - Use deploy menu to deploy a kvm.
 
 ![kvm creator with cli](https://www.berkbal.com/wp-content/uploads/2022/01/virt_create_cli_berkbal.com_.png)
